@@ -1,0 +1,8 @@
+# wine command
+WINE=wine
+
+include Makefile-common
+
+# upload hex file to Vex
+upload: hex
+	sudo $(VEXCTL_BASE)/vexctl upload $(HEX_OUT)

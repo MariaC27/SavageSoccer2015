@@ -1,0 +1,13 @@
+# ignore file backups
+*~
+*.bak.xml
+
+# ignore error files
+*.err
+
+# ignore netbeans files
+/nbproject/private/
+
+# ignore build artifacts
+/build/
+*.hex
