@@ -5,9 +5,9 @@
 #include "Autonomous.h"
 
 // Length of autonomous period in seconds
-#define AUTONOMOUS_TIME 10
+unsigned char autonomousTime = 10;
 // Length of teleoperated period in seconds
-#define TELEOP_TIME 120
+unsigned char teleopTime = 120;
 
 void IO_Initialization(void);
 void Initialize(void);
@@ -26,7 +26,7 @@ void main(void);
 void IO_Initialization(void) {
 #ifdef COMPETITION
     // Ten second autonomous and 120 second teleop
-    SetCompetitionMode(AUTONOMOUS_TIME, TELEOP_TIME);
+    SetCompetitionMode(autonomousTime, teleopTime);
 #endif /* COMPETITION */
     // Set all ports to digital input mode
     DefineControllerIO(
