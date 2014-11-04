@@ -1,4 +1,5 @@
 #include "Controller.h"
+#include "Util.h"
 
 typedef unsigned char Controller_Port;
 
@@ -19,8 +20,9 @@ const Controller_Channel Controller_dumperDoorButton = CHANNEL_5_TOP;
 
 const Controller_Channel Controller_driveReverseButton = CHANNEL_5_BOTTOM;
 
-const Controller_Channel Controller_driveMovehannel = CHANNEL_3;
-const Controller_Channel Controller_driveRotatehannel = CHANNEL_1;
+Controller_Position Controller_GetStickAxis(Controller_Port port, Controller_Channel channel) {
+    return -ConvertSigned(GetOIAInput(port, channel));
+}
 
 bool Controller_IsDumperRaiseButtonPressed(void) {
     return GetOIDInput(Controller_port, Controller_dumperRaiseButton);
@@ -38,10 +40,10 @@ bool Controller_IsDriveReverseButtonPressed(void) {
     return GetOIDInput(Controller_port, Controller_driveReverseButton);
 }
 
-unsigned char Controller_GetDriveMove(void) {
-    return GetOIAInput(Controller_port, Controller_driveMoveChannel);
+Controller_Position Controller_GetDriveMove(void) {
+    return Controller_GetStickAxis(Controller_port, Controller_driveMoveChannel);
 }
 
-unsigned char Controller_GetDriveRotate(void) {
-    return GetOIAInput(Controller_port, Controller_driveRotateChannel);
+Controller_Position Controller_GetDriveRotate(void) {
+    return Controller_GetStickAxis(Controller_port, Controller_driveRotateChannel);
 }

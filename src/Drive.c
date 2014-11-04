@@ -10,10 +10,10 @@ void Drive_SetWheel(Drive_Wheel wheel, Motor_Speed speed);
 bool reversed = true;
 
 const Drive_Wheels Drive_wheels = {
-    {1, false}, // Front left {port, inverted}
-    {2, true}, //  Front right
-    {3, false}, // Rear left
-    {4, true} //   Rear right
+    {1, true}, //  Front left {port, inverted}
+    {2, false}, // Front right
+    {3, true}, //  Rear left
+    {4, false} //  Rear right
 };
 
 /**
@@ -35,7 +35,9 @@ void Drive_Teleop(void) {
     static bool reverseButtonPressed = false;
     
     Drive_Arcade(Controller_GetDriveMove(), Controller_GetDriveRotate());
+//    Drive_Tank(Controller_GetDriveMove(), Controller_GetDriveRotate());
 
+    
     if (!reverseButtonPressed) {
         if (Controller_IsDriveReverseButtonPressed()) {
             reverseButtonPressed = true;
@@ -79,8 +81,8 @@ void Drive_Arcade(Motor_Speed moveSpeed, Motor_Speed rotateSpeed) {
 
 void Drive_Tank(Motor_Speed leftSpeed, Motor_Speed rightSpeed) {
     Drive_SetWheel(Drive_wheels.frontLeft, leftSpeed);
-    Drive_SetWheel(Drive_wheels.frontRight, leftSpeed);
-    Drive_SetWheel(Drive_wheels.rearLeft, rightSpeed);
+    Drive_SetWheel(Drive_wheels.frontRight, rightSpeed);
+    Drive_SetWheel(Drive_wheels.rearLeft, leftSpeed);
     Drive_SetWheel(Drive_wheels.rearRight, rightSpeed);
 }
 
@@ -93,5 +95,5 @@ void Drive_Stop(void) {
 }
 
 void Drive_SetWheel(Drive_Wheel wheel, Motor_Speed speed) {
-    Motor_set(wheel.port, speed * wheel.inverted ? -1 : 1);
+    Motor_set(wheel.port, wheel.inverted ? (-speed) : speed);
 }

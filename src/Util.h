@@ -14,7 +14,7 @@
  * @param b another number
  * @return the minimum
  */
-char min(char a, char b);
+signed char min(char a, char b);
 
 /**
  * Computes the maximum of two numbers.
@@ -22,7 +22,11 @@ char min(char a, char b);
  * @param b another number
  * @return the maximum
  */
-char max(char a, char b);
+signed char max(signed char a, signed char b);
+
+unsigned char ConvertUnsigned(signed char n);
+
+signed char ConvertSigned(unsigned char n);
 
 #endif	/* UTIL_H */
 

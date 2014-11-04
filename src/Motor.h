@@ -19,7 +19,7 @@ typedef unsigned char Motor_Port;
  * Type representing the speed of a motor. This value is signed and should be
  * used in all functions that take a motor speed.
  */
-typedef char Motor_Speed;
+typedef signed char Motor_Speed;
 
 /**
  * Sets the speed of a motor.

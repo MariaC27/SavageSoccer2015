@@ -3,7 +3,6 @@
 #include "Drive.h"
 #include "Dumper.h"
 #include "Autonomous.h"
-#include "Teleoperated.h"
 
 // Length of autonomous period in seconds
 #define AUTONOMOUS_TIME 10
@@ -78,9 +77,12 @@ void Autonomous(void) {
  * function.
  */
 void OperatorControl(void) {
-    Teleop_Init();
+    Drive_TeleopInit();
+    Dumper_TeleopInit();
+    
     while (true) {
-        Teleop_Update();
+        Drive_Teleop();
+        Dumper_Update();
 #ifndef COMPETITION
         if (!IsEnabled()) break;
 #endif /* COMPETITION */
@@ -94,9 +96,9 @@ void OperatorControl(void) {
  */
 void main(void) {
 #ifndef COMPETITION
-    while (TRUE) {
-        OperatorControl();
+    while (true) {
         while (!IsEnabled());
+        OperatorControl();
     }
 #endif /* COMPETITION */
 }

@@ -19,13 +19,13 @@ VEX_TOOLCHAIN_BASE=../../../VexToolchain
 MCC_BASE=$(VEX_TOOLCHAIN_BASE)/mcc18
 
 # Vexctl base directory
-VEXCTL_BASE=$(VEX_TOOLCHAIN_BASE)/Vexctl
+VEXCTL_BASE=$(VEX_TOOLCHAIN_BASE)/vexctl
 
 # MCC18 compiler
 MCC=$(WINE) $(MCC_BASE)/bin/mcc18.exe
 
 # compiler flags
-MCC_FLAGS=-p=18F8520 -w=2 -nw=2066 -D_VEX_BOARD -I=$(MCC_BASE)/h -I=$(VEX_TOOLCHAIN_BASE)/WPILib/Vex
+MCC_FLAGS=-p=18F8520 -w=2 -D_VEX_BOARD -I=$(MCC_BASE)/h -I=$(VEX_TOOLCHAIN_BASE)/WPILib/Vex
 
 # linker
 MPLINK=$(WINE) $(MCC_BASE)/bin/mplink.exe

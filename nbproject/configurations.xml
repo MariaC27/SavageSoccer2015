@@ -16,8 +16,6 @@
       <in>Motor.h</in>
       <in>Servo.c</in>
       <in>Servo.h</in>
-      <in>Teleoperated.c</in>
-      <in>Teleoperated.h</in>
       <in>Util.c</in>
       <in>Util.h</in>
     </df>
@@ -89,10 +87,6 @@
       </item>
       <item path="src/Servo.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/Teleoperated.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="src/Teleoperated.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/Util.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/Util.h" ex="false" tool="3" flavor2="0">
@@ -118,7 +112,7 @@
               <pElem>../../../VexToolchain/WPILib/Vex</pElem>
             </incDir>
             <preprocessorList>
-              <Elem>__VEX_BOARD</Elem>
+              <Elem>_VEX_BOARD</Elem>
             </preprocessorList>
           </cTool>
         </makeTool>
@@ -150,10 +144,6 @@
       <item path="src/Servo.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/Servo.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/Teleoperated.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="src/Teleoperated.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Util.c" ex="false" tool="0" flavor2="0">
       </item>

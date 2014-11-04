@@ -10,6 +10,8 @@
 
 #include "Common.h"
 
+typedef signed char Controller_Position;
+
 /**
  * Gets the state of the dumper raise button on the controller.
  * @return true if the button is pressed
@@ -39,13 +41,13 @@ bool Controller_IsDriveReverseButtonPressed(void);
  * the robot.
  * @return the position of the joystick between -127 and 127
  */
-unsigned char Controller_GetDriveMove(void);
+Controller_Position Controller_GetDriveMove(void);
 
 /**
  * Gets the value of the joystick that controls the rotation of
  * the robot.
  * @return the position of the joystick between -127 and 127
  */
-unsigned char Controller_GetDriveRotate(void);
+Controller_Position Controller_GetDriveRotate(void);
 
 #endif	/* CONTROLLER_H */
