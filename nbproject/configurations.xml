@@ -9,13 +9,15 @@
       <in>Controller.h</in>
       <in>Drive.c</in>
       <in>Drive.h</in>
-      <in>Dumper.c</in>
-      <in>Dumper.h</in>
+      <in>Lifter.c</in>
+      <in>Lifter.h</in>
       <in>Main.c</in>
       <in>Motor.c</in>
       <in>Motor.h</in>
       <in>Servo.c</in>
       <in>Servo.h</in>
+      <in>Sweeper.c</in>
+      <in>Sweeper.h</in>
       <in>Util.c</in>
       <in>Util.h</in>
     </df>
@@ -73,9 +75,9 @@
       </item>
       <item path="src/Drive.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/Dumper.c" ex="false" tool="0" flavor2="0">
+      <item path="src/Lifter.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="src/Dumper.h" ex="false" tool="3" flavor2="0">
+      <item path="src/Lifter.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Main.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -86,6 +88,10 @@
       <item path="src/Servo.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/Servo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Sweeper.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/Sweeper.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Util.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -131,9 +137,9 @@
       </item>
       <item path="src/Drive.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/Dumper.c" ex="false" tool="0" flavor2="0">
+      <item path="src/Lifter.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="src/Dumper.h" ex="false" tool="3" flavor2="0">
+      <item path="src/Lifter.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Main.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -144,6 +150,10 @@
       <item path="src/Servo.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/Servo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Sweeper.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/Sweeper.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Util.c" ex="false" tool="0" flavor2="0">
       </item>

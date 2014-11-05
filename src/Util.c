@@ -13,6 +13,6 @@ unsigned char ConvertUnsigned(signed char n) {
 }
 
 signed char ConvertSigned(unsigned char n) {
-    if(n == 255) n--;
+    if (n == 255) n--;
     return (short) n - 127;
 }

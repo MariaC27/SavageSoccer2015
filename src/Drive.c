@@ -4,16 +4,11 @@
 
 void Drive_SetWheel(Drive_Wheel wheel, Motor_Speed speed);
 
-/**
- * Whether the front of the robot is reversed.
- */
-bool reversed = true;
-
 const Drive_Wheels Drive_wheels = {
-    {1, true}, //  Front left {port, inverted}
-    {2, false}, // Front right
-    {3, true}, //  Rear left
-    {4, false} //  Rear right
+    {1, false}, //  Front left {port, inverted}
+    {2, true}, // Front right
+    {3, false}, //  Rear left
+    {4, true} //  Rear right
 };
 
 /**
@@ -32,24 +27,7 @@ void Drive_TeleopInit(void) {
  * Put code here that will be run in a loop during teleop and drive the robot.
  */
 void Drive_Teleop(void) {
-    static bool reverseButtonPressed = false;
-    
     Drive_Arcade(Controller_GetDriveMove(), Controller_GetDriveRotate());
-//    Drive_Tank(Controller_GetDriveMove(), Controller_GetDriveRotate());
-
-    
-    if (!reverseButtonPressed) {
-        if (Controller_IsDriveReverseButtonPressed()) {
-            reverseButtonPressed = true;
-
-            // Reverse
-            reversed = !reversed;
-        }
-    } else {
-        if (!Controller_IsDriveReverseButtonPressed()) {
-            reverseButtonPressed = false;
-        }
-    }
 }
 
 void Drive_Arcade(Motor_Speed moveSpeed, Motor_Speed rotateSpeed) {

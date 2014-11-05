@@ -1,4 +1,3 @@
-
 #include "Servo.h"
 
 void Servo_set(Servo_Port port, Servo_Position position) {

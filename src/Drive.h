@@ -61,7 +61,7 @@ void Drive_Tank(Motor_Speed leftSpeed, Motor_Speed rightSpeed);
  * @param speed the speed to drive at (-127 to 127)
  */
 void Drive_Straight(Motor_Speed speed);
- 
+
 /**
  * Stops the robot.
  */

@@ -10,34 +10,35 @@ typedef unsigned char Controller_Channel;
 
 const Controller_Port Controller_port = PORT_1;
 
+const Controller_Channel Controller_lifterRaiseButton = CHANNEL_5_TOP;
+const Controller_Channel Controller_lifterLowerButton = CHANNEL_5_BOTTOM;
+
+const Controller_Channel Controller_sweeperInButton = CHANNEL_6_TOP;
+const Controller_Channel Controller_sweeperOutButton = CHANNEL_6_BOTTOM;
+
 const Controller_Channel Controller_driveMoveChannel = CHANNEL_3;
 const Controller_Channel Controller_driveRotateChannel = CHANNEL_1;
 
-const Controller_Channel Controller_dumperRaiseButton = CHANNEL_6_TOP;
-const Controller_Channel Controller_dumperLowerButton = CHANNEL_6_BOTTOM;
-
-const Controller_Channel Controller_dumperDoorButton = CHANNEL_5_TOP;
-
-const Controller_Channel Controller_driveReverseButton = CHANNEL_5_BOTTOM;
-
 Controller_Position Controller_GetStickAxis(Controller_Port port, Controller_Channel channel) {
+    // For some reason, up and left are negative on the controller, so invert 
+    // the axis.
     return -ConvertSigned(GetOIAInput(port, channel));
 }
 
-bool Controller_IsDumperRaiseButtonPressed(void) {
-    return GetOIDInput(Controller_port, Controller_dumperRaiseButton);
+bool Controller_IsLifterRaiseButtonPressed(void) {
+    return GetOIDInput(Controller_port, Controller_lifterRaiseButton);
 }
 
-bool Controller_IsDumperLowerButtonPressed(void) {
-    return GetOIDInput(Controller_port, Controller_dumperLowerButton);
+bool Controller_IsLifterLowerButtonPressed(void) {
+    return GetOIDInput(Controller_port, Controller_lifterLowerButton);
 }
 
-bool Controller_IsDumperDoorButtonPressed(void) {
-    return GetOIDInput(Controller_port, Controller_dumperDoorButton);
+bool Controller_IsSweeperInButtonPressed(void) {
+    return GetOIDInput(Controller_port, Controller_sweeperInButton);
 }
 
-bool Controller_IsDriveReverseButtonPressed(void) {
-    return GetOIDInput(Controller_port, Controller_driveReverseButton);
+bool Controller_IsSweeperOutButtonPressed(void) {
+    return GetOIDInput(Controller_port, Controller_sweeperOutButton);
 }
 
 Controller_Position Controller_GetDriveMove(void) {

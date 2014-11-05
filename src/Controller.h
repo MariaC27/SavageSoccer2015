@@ -13,28 +13,28 @@
 typedef signed char Controller_Position;
 
 /**
- * Gets the state of the dumper raise button on the controller.
+ * Gets the state of the lifter raise button.
  * @return true if the button is pressed
  */
-bool Controller_IsDumperRaiseButtonPressed(void);
+bool Controller_IsLifterRaiseButtonPressed(void);
 
 /**
- * Gets the state of the dumper lower button on the controller.
+ * Gets the state of the lifter lower button.
  * @return true if the button is pressed
  */
-bool Controller_IsDumperLowerButtonPressed(void);
+bool Controller_IsLifterLowerButtonPressed(void);
 
 /**
- * Gets the state of the dumper door button on the controller.
+ * Gets the state of the sweeper in button.
  * @return true if the button is pressed
  */
-bool Controller_IsDumperDoorButtonPressed(void);
+bool Controller_IsSweeperInButtonPressed(void);
 
 /**
- * Gets the state of the dumper door button on the controller.
+ * Gets the state of the sweeper out button.
  * @return true if the button is pressed
  */
-bool Controller_IsDriveReverseButtonPressed(void);
+bool Controller_IsSweeperOutButtonPressed(void);
 
 /**
  * Gets the value of the joystick that controls the forward/backward movement of
