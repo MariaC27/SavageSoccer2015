@@ -30,6 +30,11 @@ const extern Drive_Wheels Drive_wheels;
 void Drive_Init(void);
 
 /**
+ * Runs once at the beginning of autonomous.
+ */
+void Drive_AutonomousInit(void);
+
+/**
  * Runs once at the beginning of teleop.
  */
 void Drive_TeleopInit(void);

@@ -31,7 +31,7 @@ void IO_Initialization(void) {
 #endif /* COMPETITION */
     // Set all ports to digital input mode
     DefineControllerIO(
-            0, // Number of analog inputs
+            1, // Number of analog inputs
             INPUT, // 1 - digital I/O port mode
             INPUT, // 2
             INPUT, // 3

@@ -24,6 +24,8 @@ signed char min(char a, char b);
  */
 signed char max(signed char a, signed char b);
 
+int abs(int n);
+
 unsigned char ConvertUnsigned(signed char n);
 
 signed char ConvertSigned(unsigned char n);

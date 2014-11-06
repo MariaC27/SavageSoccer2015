@@ -1,8 +1,18 @@
 #include "Drive.h"
 #include "Controller.h"
 #include "Util.h"
+#include "PID.h"
+#include <stdlib.h>
 
 void Drive_SetWheel(Drive_Wheel wheel, Motor_Speed speed);
+
+const Sensor_Port Drive_gyroPort = 1;
+PID gyroPID;
+const unsigned char Drive_gyroSensitivity = 70;
+const unsigned char Drive_gyroDeadband = 3;
+const float Drive_gyroP = 0.0;
+const float Drive_gyroI = 0.0;
+const float Drive_gyroD = 0.0;
 
 const Drive_Wheels Drive_wheels = {
     {1, false}, //  Front left {port, inverted}
@@ -15,6 +25,22 @@ const Drive_Wheels Drive_wheels = {
  * Put code here to initialize the drive subsystem. 
  */
 void Drive_Init(void) {
+    InitGyro(Drive_gyroPort);
+    SetGyroType(Drive_gyroPort, Drive_gyroSensitivity);
+    SetGyroDeadband(Drive_gyroPort, Drive_gyroDeadband);
+}
+
+/**
+ * Put code here to initialize the drive subsystem at the beginning of
+ * autonomous. 
+ */
+void Drive_AutonomousInit(void) {
+    StartGyro(Drive_gyroPort);
+
+    PID_Init(&gyroPID);
+    gyroPID.p = Drive_gyroP;
+    gyroPID.i = Drive_gyroI;
+    gyroPID.d = Drive_gyroD;
 }
 
 /**
@@ -64,8 +90,32 @@ void Drive_Tank(Motor_Speed leftSpeed, Motor_Speed rightSpeed) {
     Drive_SetWheel(Drive_wheels.rearRight, rightSpeed);
 }
 
+void Drive_Direction(Motor_Speed speed, Motor_Speed maxRotationSpeed, int targetAngle) {
+    int rotationSpeed;
+
+    gyroPID.setpoint = targetAngle;
+    gyroPID.input = GetGyroAngle(Drive_gyroPort);
+
+    rotationSpeed = PID_Calc(&gyroPID);
+    if (abs(rotationSpeed) > maxRotationSpeed) {
+        rotationSpeed = maxRotationSpeed;
+    }
+
+    Drive_Arcade(speed, 0);
+}
+
 void Drive_Straight(Motor_Speed speed) {
     Drive_Tank(speed, speed);
+}
+
+void Drive_StraightTime(Motor_Speed speed, long time) {
+    int angle = GetGyroAngle(Drive_gyroPort);
+    int endTime = GetMsClock() + time;
+
+    while (GetMsClock() < endTime) {
+        Drive_Direction(speed, 127, angle);
+    }
+    Drive_Stop();
 }
 
 void Drive_Stop(void) {

@@ -14,6 +14,8 @@
       <itemPath>src/Main.c</itemPath>
       <itemPath>src/Motor.c</itemPath>
       <itemPath>src/Motor.h</itemPath>
+      <itemPath>src/PID.c</itemPath>
+      <itemPath>src/PID.h</itemPath>
       <itemPath>src/Servo.c</itemPath>
       <itemPath>src/Servo.h</itemPath>
       <itemPath>src/Sweeper.c</itemPath>
@@ -82,6 +84,10 @@
       </item>
       <item path="src/Motor.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/PID.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/PID.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/Servo.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/Servo.h" ex="false" tool="3" flavor2="0">
@@ -143,6 +149,10 @@
       <item path="src/Motor.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/Motor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/PID.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/PID.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Servo.c" ex="false" tool="0" flavor2="0">
       </item>

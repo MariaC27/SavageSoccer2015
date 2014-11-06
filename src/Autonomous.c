@@ -7,6 +7,8 @@
  * the Wait(millis) function.
  */
 void Autonomous_Run(void) {
+    Drive_AutonomousInit();
+    
     // Drive backwards
     Drive_Straight(-100);
     Wait(4500);
