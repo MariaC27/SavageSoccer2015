@@ -4,15 +4,20 @@
 #include "PID.h"
 #include <stdlib.h>
 
+void Drive_ArcadeImpl(Motor_Speed moveSpeed, Motor_Speed rotateSpeed);
 void Drive_SetWheel(Drive_Wheel wheel, Motor_Speed speed);
+int Drive_GetGyroAngle(void);
 
 const Sensor_Port Drive_gyroPort = 1;
 PID gyroPID;
 const unsigned char Drive_gyroSensitivity = 70;
 const unsigned char Drive_gyroDeadband = 3;
+const unsigned char Drive_gyroTolerance = 5;
 const float Drive_gyroP = 0.0;
 const float Drive_gyroI = 0.0;
 const float Drive_gyroD = 0.0;
+
+const Motor_Speed arcadeRotationDeadband = 10;
 
 const Drive_Wheels Drive_wheels = {
     {1, false}, //  Front left {port, inverted}
@@ -28,6 +33,12 @@ void Drive_Init(void) {
     InitGyro(Drive_gyroPort);
     SetGyroType(Drive_gyroPort, Drive_gyroSensitivity);
     SetGyroDeadband(Drive_gyroPort, Drive_gyroDeadband);
+
+    PID_Init(&gyroPID);
+    gyroPID.p = Drive_gyroP;
+    gyroPID.i = Drive_gyroI;
+    gyroPID.d = Drive_gyroD;
+    gyroPID.tolerance = Drive_gyroTolerance;
 }
 
 /**
@@ -36,11 +47,6 @@ void Drive_Init(void) {
  */
 void Drive_AutonomousInit(void) {
     StartGyro(Drive_gyroPort);
-
-    PID_Init(&gyroPID);
-    gyroPID.p = Drive_gyroP;
-    gyroPID.i = Drive_gyroI;
-    gyroPID.d = Drive_gyroD;
 }
 
 /**
@@ -57,6 +63,24 @@ void Drive_Teleop(void) {
 }
 
 void Drive_Arcade(Motor_Speed moveSpeed, Motor_Speed rotateSpeed) {
+    static bool orientationLocked = false;
+    static int orientation = 0;
+
+    if (abs(rotateSpeed) < arcadeRotationDeadband) {
+        if (!orientationLocked) {
+            PID_Reset(&gyroPID);
+            orientation = Drive_GetGyroAngle();
+            orientationLocked = true;
+        }
+        Drive_Orientation(moveSpeed, 127, orientation);
+    } else {
+        // Make sure the direction is unlocked
+        orientationLocked = false;
+        Drive_ArcadeImpl(moveSpeed, rotateSpeed);
+    }
+}
+
+void Drive_ArcadeImpl(Motor_Speed moveSpeed, Motor_Speed rotateSpeed) {
     Motor_Speed leftMotorSpeed;
     Motor_Speed rightMotorSpeed;
 
@@ -81,6 +105,7 @@ void Drive_Arcade(Motor_Speed moveSpeed, Motor_Speed rotateSpeed) {
 
     // Drive the left and right sides of the robot at the specified speeds.
     Drive_Tank(leftMotorSpeed, rightMotorSpeed);
+
 }
 
 void Drive_Tank(Motor_Speed leftSpeed, Motor_Speed rightSpeed) {
@@ -90,18 +115,15 @@ void Drive_Tank(Motor_Speed leftSpeed, Motor_Speed rightSpeed) {
     Drive_SetWheel(Drive_wheels.rearRight, rightSpeed);
 }
 
-void Drive_Direction(Motor_Speed speed, Motor_Speed maxRotationSpeed, int targetAngle) {
+void Drive_Orientation(Motor_Speed speed, Motor_Speed maxRotationSpeed, int targetAngle) {
     int rotationSpeed;
 
-    gyroPID.setpoint = targetAngle;
-    gyroPID.input = GetGyroAngle(Drive_gyroPort);
-
-    rotationSpeed = PID_Calc(&gyroPID);
+    rotationSpeed = PID_Calc(&gyroPID, Drive_GetGyroAngle(), targetAngle);
     if (abs(rotationSpeed) > maxRotationSpeed) {
-        rotationSpeed = maxRotationSpeed;
+        rotationSpeed = (rotationSpeed < 0 ? -maxRotationSpeed : maxRotationSpeed);
     }
 
-    Drive_Arcade(speed, 0);
+    Drive_ArcadeImpl(speed, rotationSpeed);
 }
 
 void Drive_Straight(Motor_Speed speed) {
@@ -109,13 +131,25 @@ void Drive_Straight(Motor_Speed speed) {
 }
 
 void Drive_StraightTime(Motor_Speed speed, long time) {
-    int angle = GetGyroAngle(Drive_gyroPort);
+    int angle = Drive_GetGyroAngle();
     int endTime = GetMsClock() + time;
 
     while (GetMsClock() < endTime) {
-        Drive_Direction(speed, 127, angle);
+        Drive_Orientation(speed, 127, angle);
     }
     Drive_Stop();
+}
+
+void Drive_RotateTo(int orientation, Motor_Speed maxRotationSpeed) {
+    PID_Reset(&gyroPID);
+    while (!PID_OnTarget(&gyroPID)){
+        Drive_Orientation(0, maxRotationSpeed, orientation);
+    }
+    Drive_Stop();
+}
+
+void Drive_Rotate(int degrees, Motor_Speed maxRotationSpeed) {
+    Drive_RotateTo(Drive_GetGyroAngle() + degrees, maxRotationSpeed);
 }
 
 void Drive_Stop(void) {
@@ -124,4 +158,8 @@ void Drive_Stop(void) {
 
 void Drive_SetWheel(Drive_Wheel wheel, Motor_Speed speed) {
     Motor_set(wheel.port, wheel.inverted ? (-speed) : speed);
+}
+
+int Drive_GetGyroAngle(void) {
+    return GetGyroAngle(Drive_gyroPort);
 }
