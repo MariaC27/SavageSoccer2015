@@ -100,7 +100,7 @@
     </conf>
     <conf name="Windows" type="0">
       <toolsSet>
-        <compilerSet>Cygwin|Cygwin_4.x</compilerSet>
+        <compilerSet>MCC18|GNU</compilerSet>
         <dependencyChecking>false</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
