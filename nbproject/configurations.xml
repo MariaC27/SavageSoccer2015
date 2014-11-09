@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="95">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
-    <df root="src" name="0">
-      <in>Autonomous.c</in>
-      <in>Autonomous.h</in>
-      <in>Common.h</in>
-      <in>Controller.c</in>
-      <in>Controller.h</in>
-      <in>Drive.c</in>
-      <in>Drive.h</in>
-      <in>Lifter.c</in>
-      <in>Lifter.h</in>
-      <in>Main.c</in>
-      <in>Motor.c</in>
-      <in>Motor.h</in>
-      <in>Servo.c</in>
-      <in>Servo.h</in>
-      <in>Sweeper.c</in>
-      <in>Sweeper.h</in>
-      <in>Util.c</in>
-      <in>Util.h</in>
-    </df>
+    <logicalFolder name="f1" displayName="Sources" projectFiles="true">
+      <itemPath>src/Autonomous.c</itemPath>
+      <itemPath>src/Autonomous.h</itemPath>
+      <itemPath>src/Common.h</itemPath>
+      <itemPath>src/Controller.c</itemPath>
+      <itemPath>src/Controller.h</itemPath>
+      <itemPath>src/Drive.c</itemPath>
+      <itemPath>src/Drive.h</itemPath>
+      <itemPath>src/Lifter.c</itemPath>
+      <itemPath>src/Lifter.h</itemPath>
+      <itemPath>src/Main.c</itemPath>
+      <itemPath>src/Motor.c</itemPath>
+      <itemPath>src/Motor.h</itemPath>
+      <itemPath>src/Servo.c</itemPath>
+      <itemPath>src/Servo.h</itemPath>
+      <itemPath>src/Sweeper.c</itemPath>
+      <itemPath>src/Sweeper.h</itemPath>
+      <itemPath>src/Util.c</itemPath>
+      <itemPath>src/Util.h</itemPath>
+    </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false"
@@ -31,9 +31,6 @@
     </logicalFolder>
   </logicalFolder>
   <sourceFolderFilter>^(nbproject|build)$</sourceFolderFilter>
-  <sourceRootList>
-    <Elem>src</Elem>
-  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Linux" type="0">
