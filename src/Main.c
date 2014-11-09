@@ -101,6 +101,8 @@ void OperatorControl(void) {
  */
 void main(void) {
 #ifndef COMPETITION
+    IO_Initialization();
+    Initialize();
     while (true) {
         while (!IsEnabled());
         OperatorControl();

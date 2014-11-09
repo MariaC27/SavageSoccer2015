@@ -10,7 +10,7 @@ void Autonomous_Run(void) {
     Drive_AutonomousInit();
     
     // Drive backwards
-    Drive_Straight(-100);
-    Wait(4500);
-    Drive_Stop();
+    Drive_RotateTo(450, 50);
+    Wait(500);
+    Drive_StraightTime(127, 1000);
 }

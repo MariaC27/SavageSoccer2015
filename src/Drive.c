@@ -2,7 +2,6 @@
 #include "Controller.h"
 #include "Util.h"
 #include "PID.h"
-#include <stdlib.h>
 
 void Drive_ArcadeImpl(Motor_Speed moveSpeed, Motor_Speed rotateSpeed);
 void Drive_SetWheel(Drive_Wheel wheel, Motor_Speed speed);
@@ -10,11 +9,14 @@ int Drive_GetGyroAngle(void);
 
 const Sensor_Port Drive_gyroPort = 1;
 PID gyroPID;
-const unsigned char Drive_gyroSensitivity = 70;
+const unsigned int Drive_gyroSensitivity = 70;
 const unsigned char Drive_gyroDeadband = 3;
-const unsigned char Drive_gyroTolerance = 5;
-const float Drive_gyroP = 0.0;
-const float Drive_gyroI = 0.0;
+const unsigned int Drive_gyroTolerance = 50;
+const unsigned int Drive_gyroMaxIntegral = 20;
+const float Drive_gyroP = 0.05;
+const float Drive_gyroPSpeedScale = 0.0005;
+const float Drive_gyroI = 0.04;
+const float Drive_gyroISpeedScale = 0.03;
 const float Drive_gyroD = 0.0;
 
 const Motor_Speed arcadeRotationDeadband = 10;
@@ -30,15 +32,16 @@ const Drive_Wheels Drive_wheels = {
  * Put code here to initialize the drive subsystem. 
  */
 void Drive_Init(void) {
-    InitGyro(Drive_gyroPort);
     SetGyroType(Drive_gyroPort, Drive_gyroSensitivity);
     SetGyroDeadband(Drive_gyroPort, Drive_gyroDeadband);
+    InitGyro(Drive_gyroPort);
 
     PID_Init(&gyroPID);
     gyroPID.p = Drive_gyroP;
     gyroPID.i = Drive_gyroI;
     gyroPID.d = Drive_gyroD;
     gyroPID.tolerance = Drive_gyroTolerance;
+    gyroPID.maxIntegral = Drive_gyroMaxIntegral;
 }
 
 /**
@@ -53,6 +56,7 @@ void Drive_AutonomousInit(void) {
  * Put code here to initialize the drive subsystem at the beginning of teleop. 
  */
 void Drive_TeleopInit(void) {
+    StartGyro(Drive_gyroPort);
 }
 
 /**
@@ -117,10 +121,12 @@ void Drive_Tank(Motor_Speed leftSpeed, Motor_Speed rightSpeed) {
 
 void Drive_Orientation(Motor_Speed speed, Motor_Speed maxRotationSpeed, int targetAngle) {
     int rotationSpeed;
-
+    int absSpeed = abs(speed);
+    gyroPID.i = Drive_gyroI + (Drive_gyroISpeedScale * absSpeed);
+    gyroPID.p = Drive_gyroP + (Drive_gyroPSpeedScale * absSpeed);
     rotationSpeed = PID_Calc(&gyroPID, Drive_GetGyroAngle(), targetAngle);
     if (abs(rotationSpeed) > maxRotationSpeed) {
-        rotationSpeed = (rotationSpeed < 0 ? -maxRotationSpeed : maxRotationSpeed);
+        rotationSpeed = ((rotationSpeed < 0) ? (-maxRotationSpeed) : (maxRotationSpeed));
     }
 
     Drive_ArcadeImpl(speed, rotationSpeed);
@@ -142,7 +148,7 @@ void Drive_StraightTime(Motor_Speed speed, long time) {
 
 void Drive_RotateTo(int orientation, Motor_Speed maxRotationSpeed) {
     PID_Reset(&gyroPID);
-    while (!PID_OnTarget(&gyroPID)){
+    while (!PID_OnTarget(&gyroPID)) {
         Drive_Orientation(0, maxRotationSpeed, orientation);
     }
     Drive_Stop();
@@ -161,5 +167,5 @@ void Drive_SetWheel(Drive_Wheel wheel, Motor_Speed speed) {
 }
 
 int Drive_GetGyroAngle(void) {
-    return GetGyroAngle(Drive_gyroPort);
+    return -GetGyroAngle(Drive_gyroPort);
 }

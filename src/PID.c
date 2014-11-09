@@ -7,6 +7,7 @@ void PID_Init(PID* pid) {
     pid->i = 0;
     pid->d = 0;
     pid->tolerance = 0;
+    pid->maxIntegral = 100;
     pid->minOutput = -127;
     pid->maxOutput = 127;
 
@@ -15,7 +16,7 @@ void PID_Init(PID* pid) {
 
 int PID_Calc(PID* pid, int input, int setpoint) {
     // All variables must be declared at the start of their scope... arrgh
-    unsigned long currTime = GetMsClock();
+    unsigned long currTime = GetUsClock();
     unsigned long elapsedTime;
     int error;
     float pTerm;
@@ -32,36 +33,46 @@ int PID_Calc(PID* pid, int input, int setpoint) {
 
     elapsedTime = currTime - pid->lastTime;
 
-    // Make sure at least 1 ms has passed to avoid a divide by zero error
-    if (elapsedTime < 1) {
+    // Only update the output if more than one microsecond has passed to avoid
+    // divide by zero errors.
+    if (elapsedTime >= 1) {
+        // error = difference between setpoint and the actual value
+        error = setpoint - input;
+
+        // proportional term = P gain * error
+        pTerm = pid->p * error;
+
+        // Calculate the new integral
+        pid->integral += error * elapsedTime;
+
+        // Prevent integral windup
+        if (abs(pid->integral) > pid->maxIntegral) {
+            pid->integral = ((pid->integral < 0) ? (-pid->maxIntegral) : (pid->maxIntegral));
+        }
+
+        // integral term = I gain * integral
+        iTerm = pid->i * pid->integral;
+
+        // derivative term = D gain * rate of change of error
+        dTerm = pid->d * ((float) (error - pid->lastError) / elapsedTime);
+
+        // Sum the terms to get the (unbounded) output.
+        output = (int) (pTerm + iTerm + dTerm);
+
+        // Limit the output to the possible values for the system
+        if (output > pid->maxOutput) {
+            output = pid->maxOutput;
+        } else if (output < pid->minOutput) {
+            output = pid->minOutput;
+        }
+
+        pid->lastError = error;
+        pid->valid = true;
+        // Store the output for the next iteration and return it
+        return pid->lastOutput = output;
+    } else {
         return pid->lastOutput;
     }
-
-    // error = difference between setpoint and the actual value
-    error = setpoint - input;
-
-    // * Do the PID calculation *
-    // proportional term = P gain * error
-    pTerm = pid->p * error;
-    // Calculate the new integral (might need to prevent integral windup)
-    pid->integral += (float) error * elapsedTime;
-    // integral term = I gain * integral
-    iTerm = pid->i * pid->integral;
-    // derivative term = D gain * rate of change of error
-    dTerm = pid->d * ((float) (error - pid->lastError) / elapsedTime);
-
-    // Sum the terms to get the (unbounded) output.
-    output = (int) (pTerm + iTerm + dTerm);
-    
-    // Limit the output to the possible values for the system
-    if (output > pid->maxOutput) {
-        output = pid->maxOutput;
-    } else if (output < pid->minOutput) {
-        output = pid->minOutput;
-    }
-
-    // Store the output for the next iteration and return it
-    return pid->lastOutput = output;
 }
 
 void PID_Reset(PID* pid) {
@@ -73,8 +84,9 @@ void PID_Reset(PID* pid) {
     pid->lastOutput = 0;
     // Set the reset flag to tell the controller to reinitialize these variables
     pid->reset = true;
+    pid->valid = false;
 }
 
 bool PID_OnTarget(PID* pid) {
-    return (abs(pid->lastError) < pid->tolerance) && !pid->reset;
+    return (abs(pid->lastError) < pid->tolerance) && (pid->valid);
 }
