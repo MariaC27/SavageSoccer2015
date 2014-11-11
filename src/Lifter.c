@@ -27,7 +27,7 @@ void Lifter_Update(void) {
     if (Controller_IsLifterRaiseButtonPressed()) {
         Lifter_Raise();
     } else if (Controller_IsLifterLowerButtonPressed()) {
-        Lifter_Raise();
+        Lifter_Lower();
     } else {
         Lifter_Stop();
     }

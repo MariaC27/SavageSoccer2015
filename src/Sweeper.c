@@ -25,12 +25,26 @@ void Sweeper_TeleopInit(void) {
  * Put code here to update the sweeper based on the controls.
  */
 void Sweeper_Update(void) {
-    if (Controller_IsSweeperInButtonPressed()) {
-        Sweeper_SweepIn();
-    } else if (Controller_IsSweeperOutButtonPressed()) {
+    static bool wasSweeperToggleButtonPressed = false;
+    static bool sweeperOn = false;
+
+    if (Controller_IsSweeperToggleButtonPressed()) {
+        if(!wasSweeperToggleButtonPressed) {
+            sweeperOn = !sweeperOn;
+            wasSweeperToggleButtonPressed = true;
+        }
+    } else {
+        wasSweeperToggleButtonPressed = false;
+    }
+    
+    if(Controller_IsSweeperOutButtonPressed()) {
         Sweeper_SweepOut();
     } else {
-        Sweeper_Stop();
+        if(sweeperOn) {
+            Sweeper_SweepIn();
+        } else {
+            Sweeper_Stop();
+        }
     }
 }
 

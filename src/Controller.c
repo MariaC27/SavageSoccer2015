@@ -10,11 +10,11 @@ typedef unsigned char Controller_Channel;
 
 const Controller_Port Controller_port = PORT_1;
 
-const Controller_Channel Controller_lifterRaiseButton = CHANNEL_5_TOP;
-const Controller_Channel Controller_lifterLowerButton = CHANNEL_5_BOTTOM;
+const Controller_Channel Controller_sweeperToggleButton = CHANNEL_5_TOP;
+const Controller_Channel Controller_sweeperOutButton = CHANNEL_5_BOTTOM;
 
-const Controller_Channel Controller_sweeperInButton = CHANNEL_6_TOP;
-const Controller_Channel Controller_sweeperOutButton = CHANNEL_6_BOTTOM;
+const Controller_Channel Controller_lifterRaiseButton = CHANNEL_6_TOP;
+const Controller_Channel Controller_lifterLowerButton = CHANNEL_6_BOTTOM;
 
 const Controller_Channel Controller_driveMoveChannel = CHANNEL_3;
 const Controller_Channel Controller_driveRotateChannel = CHANNEL_1;
@@ -33,8 +33,8 @@ bool Controller_IsLifterLowerButtonPressed(void) {
     return GetOIDInput(Controller_port, Controller_lifterLowerButton);
 }
 
-bool Controller_IsSweeperInButtonPressed(void) {
-    return GetOIDInput(Controller_port, Controller_sweeperInButton);
+bool Controller_IsSweeperToggleButtonPressed(void) {
+    return GetOIDInput(Controller_port, Controller_sweeperToggleButton);
 }
 
 bool Controller_IsSweeperOutButtonPressed(void) {

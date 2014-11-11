@@ -28,7 +28,7 @@ bool Controller_IsLifterLowerButtonPressed(void);
  * Gets the state of the sweeper in button.
  * @return true if the button is pressed
  */
-bool Controller_IsSweeperInButtonPressed(void);
+bool Controller_IsSweeperToggleButtonPressed(void);
 
 /**
  * Gets the state of the sweeper out button.
