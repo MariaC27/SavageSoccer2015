@@ -8,6 +8,4 @@
  */
 void Autonomous_Run(void) {
 	Drive_AutonomousInit();
-
-	Drive_StraightTime(127, 200, 3000);
 }

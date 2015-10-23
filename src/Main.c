@@ -2,8 +2,6 @@
 #include "Controller.h"
 #include "Drive.h"
 #include "Autonomous.h"
-#include "Lifter.h"
-#include "Sweeper.h"
 
 // Length of autonomous period in seconds
 unsigned char autonomousTime = 10;
@@ -56,8 +54,6 @@ void IO_Initialization(void) {
  */
 void Initialize(void) {
 	Drive_Init();
-	Lifter_Init();
-	Sweeper_Init();
 }
 
 /*
@@ -79,13 +75,9 @@ void Autonomous(void) {
  */
 void OperatorControl(void) {
 	Drive_TeleopInit();
-	Lifter_TeleopInit();
-	Sweeper_TeleopInit();
 
 	while (true) {
 		Drive_Teleop();
-		Lifter_Update();
-		Sweeper_Update();
 
 #ifndef COMPETITION
 		if (!IsEnabled())
