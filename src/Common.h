@@ -17,13 +17,12 @@ typedef unsigned char Sensor_Port;
  * at the end of the match. Comment this out for demos, etc.
  */
 //#define COMPETITION
-
 /**
  * Boolean data type. This is done for convenience and semantic clarity because 
  * C does not have a bool type.
  */
 typedef enum {
-    false = 0, true = 1
+	false = 0, true = 1
 } bool;
 
 #endif	/* COMMON_H */

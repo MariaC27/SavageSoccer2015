@@ -26,29 +26,28 @@ void main(void);
  */
 void IO_Initialization(void) {
 #ifdef COMPETITION
-    // Ten second autonomous and 120 second teleop
-    SetCompetitionMode(autonomousTime, teleopTime);
+	// Ten second autonomous and 120 second teleop
+	SetCompetitionMode(autonomousTime, teleopTime);
 #endif /* COMPETITION */
-    // Set all ports to digital input mode
-    DefineControllerIO(
-            1, // Number of analog inputs
-            INPUT, // 1 - digital I/O port mode
-            INPUT, // 2
-            INPUT, // 3
-            INPUT, // 4
-            INPUT, // 5
-            INPUT, // 6
-            INPUT, // 7
-            INPUT, // 8
-            INPUT, // 9
-            INPUT, // 10
-            INPUT, // 11
-            INPUT, // 12
-            INPUT, // 13
-            INPUT, // 14
-            INPUT, // 15
-            INPUT //  16
-            );
+	// Set all ports to digital input mode
+	DefineControllerIO(1, // Number of analog inputs
+			INPUT, // 1 - digital I/O port mode
+			INPUT, // 2
+			INPUT, // 3
+			INPUT, // 4
+			INPUT, // 5
+			INPUT, // 6
+			INPUT, // 7
+			INPUT, // 8
+			INPUT, // 9
+			INPUT, // 10
+			INPUT, // 11
+			INPUT, // 12
+			INPUT, // 13
+			INPUT, // 14
+			INPUT, // 15
+			INPUT //  16
+			);
 }
 
 /*
@@ -56,9 +55,9 @@ void IO_Initialization(void) {
  * regardless of the field mode.
  */
 void Initialize(void) {
-    Drive_Init();
-    Lifter_Init();
-    Sweeper_Init();
+	Drive_Init();
+	Lifter_Init();
+	Sweeper_Init();
 }
 
 /*
@@ -68,7 +67,7 @@ void Initialize(void) {
  * as in the example, it will be stopped).
  */
 void Autonomous(void) {
-    Autonomous_Run();
+	Autonomous_Run();
 }
 
 /*
@@ -79,19 +78,20 @@ void Autonomous(void) {
  * function.
  */
 void OperatorControl(void) {
-    Drive_TeleopInit();
-    Lifter_TeleopInit();
-    Sweeper_TeleopInit();
+	Drive_TeleopInit();
+	Lifter_TeleopInit();
+	Sweeper_TeleopInit();
 
-    while (true) {
-        Drive_Teleop();
-        Lifter_Update();
-        Sweeper_Update();
+	while (true) {
+		Drive_Teleop();
+		Lifter_Update();
+		Sweeper_Update();
 
 #ifndef COMPETITION
-        if (!IsEnabled()) break;
+		if (!IsEnabled())
+			break;
 #endif /* COMPETITION */
-    }
+	}
 }
 
 /*
@@ -101,11 +101,12 @@ void OperatorControl(void) {
  */
 void main(void) {
 #ifndef COMPETITION
-    IO_Initialization();
-    Initialize();
-    while (true) {
-        while (!IsEnabled());
-        OperatorControl();
-    }
+	IO_Initialization();
+	Initialize();
+	while (true) {
+		while (!IsEnabled())
+			;
+		OperatorControl();
+	}
 #endif /* COMPETITION */
 }

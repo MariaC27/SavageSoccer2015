@@ -1,5 +1,0 @@
-include Makefile-common
-
-# upload hex file to Vex
-upload: hex
-	$(VEXCTL_BASE)/vexctl.exe upload $(HEX_OUT)

@@ -12,15 +12,15 @@
 #include "Motor.h"
 
 typedef struct {
-    const Motor_Port port;
-    const bool inverted;
+	const Motor_Port port;
+	const bool inverted;
 } Drive_Wheel;
 
 typedef struct {
-    const Drive_Wheel frontLeft;
-    const Drive_Wheel frontRight;
-    const Drive_Wheel rearLeft;
-    const Drive_Wheel rearRight;
+	const Drive_Wheel frontLeft;
+	const Drive_Wheel frontRight;
+	const Drive_Wheel rearLeft;
+	const Drive_Wheel rearRight;
 } Drive_Wheels;
 const extern Drive_Wheels Drive_wheels;
 
@@ -60,7 +60,8 @@ void Drive_Arcade(Motor_Speed moveSpeed, Motor_Speed rotateSpeed);
  */
 void Drive_Tank(Motor_Speed leftSpeed, Motor_Speed rightSpeed);
 
-void Drive_Orientation(Motor_Speed speed, Motor_Speed maxRotationSpeed, int targetAngle);
+void Drive_Orientation(Motor_Speed speed, Motor_Speed maxRotationSpeed,
+		int targetAngle);
 
 /**
  * Drives the robot in a straight line at the specified speed.

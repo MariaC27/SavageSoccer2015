@@ -7,7 +7,7 @@
  * the Wait(millis) function.
  */
 void Autonomous_Run(void) {
-    Drive_AutonomousInit();
+	Drive_AutonomousInit();
 
-    Drive_StraightTime(127, 200, 3000);
+	Drive_StraightTime(127, 200, 3000);
 }

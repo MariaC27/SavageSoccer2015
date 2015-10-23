@@ -11,21 +11,21 @@
 #include "Common.h"
 
 typedef struct {
-    // Public
-    float p;
-    float i;
-    float d;
-    int tolerance;
-    int maxIntegral;
-    int minOutput;
-    int maxOutput;
-    // Private
-    int lastError;
-    unsigned long lastTime;
-    int integral;
-    int lastOutput;
-    bool reset;
-    bool valid;
+	// Public
+	float p;
+	float i;
+	float d;
+	int tolerance;
+	int maxIntegral;
+	int minOutput;
+	int maxOutput;
+	// Private
+	int lastError;
+	unsigned long lastTime;
+	int integral;
+	int lastOutput;
+	bool reset;
+	bool valid;
 } PID;
 
 void PID_Init(PID* pid);
