@@ -8,15 +8,14 @@ void Drive_SetWheel(Drive_Wheel wheel, Motor_Speed speed);
 int Drive_GetGyroAngle(void);
 
 const Sensor_Port Drive_gyroPort = 1;
-PID gyroPID;
+PID Drive_gyroPID;
 const unsigned int Drive_gyroSensitivity = 70;
 const unsigned char Drive_gyroDeadband = 3;
 const unsigned int Drive_gyroTolerance = 50;
 const unsigned int Drive_gyroMaxIntegral = 20;
+const float Drive_gyroOutputSpeedScale = 0.05;
 const float Drive_gyroP = 0.05;
-const float Drive_gyroPSpeedScale = 0.0005;
 const float Drive_gyroI = 0.04;
-const float Drive_gyroISpeedScale = 0.03;
 const float Drive_gyroD = 0.0;
 
 const Motor_Speed arcadeRotationDeadband = 10;
@@ -36,12 +35,12 @@ void Drive_Init(void) {
     SetGyroDeadband(Drive_gyroPort, Drive_gyroDeadband);
     InitGyro(Drive_gyroPort);
 
-    PID_Init(&gyroPID);
-    gyroPID.p = Drive_gyroP;
-    gyroPID.i = Drive_gyroI;
-    gyroPID.d = Drive_gyroD;
-    gyroPID.tolerance = Drive_gyroTolerance;
-    gyroPID.maxIntegral = Drive_gyroMaxIntegral;
+    PID_Init(&Drive_gyroPID);
+    Drive_gyroPID.p = Drive_gyroP;
+    Drive_gyroPID.i = Drive_gyroI;
+    Drive_gyroPID.d = Drive_gyroD;
+    Drive_gyroPID.tolerance = Drive_gyroTolerance;
+    Drive_gyroPID.maxIntegral = Drive_gyroMaxIntegral;
 }
 
 /**
@@ -56,6 +55,7 @@ void Drive_AutonomousInit(void) {
  * Put code here to initialize the drive subsystem at the beginning of teleop. 
  */
 void Drive_TeleopInit(void) {
+    // Make sure the gyro is started even if autonomous did not run.
     StartGyro(Drive_gyroPort);
 }
 
@@ -67,21 +67,21 @@ void Drive_Teleop(void) {
 }
 
 void Drive_Arcade(Motor_Speed moveSpeed, Motor_Speed rotateSpeed) {
-    static bool orientationLocked = false;
-    static int orientation = 0;
+//    static bool orientationLocked = false;
+//    static int orientation = 0;
 
-    if (abs(rotateSpeed) < arcadeRotationDeadband) {
-        if (!orientationLocked) {
-            PID_Reset(&gyroPID);
-            orientation = Drive_GetGyroAngle();
-            orientationLocked = true;
-        }
-        Drive_Orientation(moveSpeed, 127, orientation);
-    } else {
-        // Make sure the direction is unlocked
-        orientationLocked = false;
+//    if (abs(rotateSpeed) < arcadeRotationDeadband) {
+//        if (!orientationLocked) {
+//            PID_Reset(&Drive_gyroPID);
+//            orientation = Drive_GetGyroAngle();
+//            orientationLocked = true;
+//        }
+//        Drive_Orientation(moveSpeed, 127, orientation);
+//    } else {
+//        // Make sure the direction is unlocked
+//        orientationLocked = false;
         Drive_ArcadeImpl(moveSpeed, rotateSpeed);
-    }
+//    }
 }
 
 void Drive_ArcadeImpl(Motor_Speed moveSpeed, Motor_Speed rotateSpeed) {
@@ -121,10 +121,7 @@ void Drive_Tank(Motor_Speed leftSpeed, Motor_Speed rightSpeed) {
 
 void Drive_Orientation(Motor_Speed speed, Motor_Speed maxRotationSpeed, int targetAngle) {
     int rotationSpeed;
-    int absSpeed = abs(speed);
-    gyroPID.i = Drive_gyroI + (Drive_gyroISpeedScale * absSpeed);
-    gyroPID.p = Drive_gyroP + (Drive_gyroPSpeedScale * absSpeed);
-    rotationSpeed = PID_Calc(&gyroPID, Drive_GetGyroAngle(), targetAngle);
+    rotationSpeed = PID_Calc(&Drive_gyroPID, Drive_GetGyroAngle(), targetAngle) + (Drive_gyroOutputSpeedScale * abs(speed));
     if (abs(rotationSpeed) > maxRotationSpeed) {
         rotationSpeed = ((rotationSpeed < 0) ? (-maxRotationSpeed) : (maxRotationSpeed));
     }
@@ -136,19 +133,26 @@ void Drive_Straight(Motor_Speed speed) {
     Drive_Tank(speed, speed);
 }
 
-void Drive_StraightTime(Motor_Speed speed, long time) {
+void Drive_StraightTime(Motor_Speed speed, long rampTime, long time) {
     int angle = Drive_GetGyroAngle();
-    int endTime = GetMsClock() + time;
+    const long startTime = GetMsClock();
+    const long endTime = startTime + time;
+    long currTime;
 
-    while (GetMsClock() < endTime) {
-        Drive_Orientation(speed, 127, angle);
+    while ((currTime = GetMsClock()) < endTime) {
+        Motor_Speed realSpeed = speed;
+        long elapsedTime = currTime - startTime;
+        if (elapsedTime < rampTime) {
+            realSpeed = speed * ((float) elapsedTime / rampTime);
+        }
+        Drive_Orientation(realSpeed, 127, angle);
     }
     Drive_Stop();
 }
 
 void Drive_RotateTo(int orientation, Motor_Speed maxRotationSpeed) {
-    PID_Reset(&gyroPID);
-    while (!PID_OnTarget(&gyroPID)) {
+    PID_Reset(&Drive_gyroPID);
+    while (!PID_OnTarget(&Drive_gyroPID)) {
         Drive_Orientation(0, maxRotationSpeed, orientation);
     }
     Drive_Stop();

@@ -8,9 +8,6 @@
  */
 void Autonomous_Run(void) {
     Drive_AutonomousInit();
-    
-    // Drive backwards
-    Drive_RotateTo(450, 50);
-    Wait(500);
-    Drive_StraightTime(127, 1000);
+
+    Drive_StraightTime(127, 200, 3000);
 }

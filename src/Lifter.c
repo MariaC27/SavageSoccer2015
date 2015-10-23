@@ -6,7 +6,7 @@ const Motor_Port Lifter_motorPort = 6;
 const struct {
     Motor_Speed raise;
     Motor_Speed lower;
-} Lifter_motorSpeed = {-127, 127};
+} Lifter_motorSpeed = {127, -127};
 
 /**
  * Put code here to initialize the sweeper subsystem.

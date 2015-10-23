@@ -18,11 +18,6 @@ int PID_Calc(PID* pid, int input, int setpoint) {
     // All variables must be declared at the start of their scope... arrgh
     unsigned long currTime = GetUsClock();
     unsigned long elapsedTime;
-    int error;
-    float pTerm;
-    float iTerm;
-    float dTerm;
-    int output;
 
     // If controller was reset (or not initialized), set lastTime to the current
     // time and skip this iteration of the loop.
@@ -36,8 +31,14 @@ int PID_Calc(PID* pid, int input, int setpoint) {
     // Only update the output if more than one microsecond has passed to avoid
     // divide by zero errors.
     if (elapsedTime >= 1) {
+        int output;
+
+        float pTerm;
+        float iTerm;
+        float dTerm;
+
         // error = difference between setpoint and the actual value
-        error = setpoint - input;
+        int error = setpoint - input;
 
         // proportional term = P gain * error
         pTerm = pid->p * error;

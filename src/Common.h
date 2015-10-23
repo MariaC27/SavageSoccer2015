@@ -16,7 +16,7 @@ typedef unsigned char Sensor_Port;
  * Enables competition mode. This makes the robot run autonomous and stop teleop
  * at the end of the match. Comment this out for demos, etc.
  */
-#define COMPETITION
+//#define COMPETITION
 
 /**
  * Boolean data type. This is done for convenience and semantic clarity because 

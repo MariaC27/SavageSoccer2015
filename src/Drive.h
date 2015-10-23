@@ -69,7 +69,7 @@ void Drive_Orientation(Motor_Speed speed, Motor_Speed maxRotationSpeed, int targ
  */
 void Drive_Straight(Motor_Speed speed);
 
-void Drive_StraightTime(Motor_Speed speed, long time);
+void Drive_StraightTime(Motor_Speed speed, long rampTime, long time);
 
 void Drive_RotateTo(int orientation, Motor_Speed maxRotationSpeed);
 
