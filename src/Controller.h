@@ -16,19 +16,19 @@ typedef signed char Controller_Position;
  * Gets the state of the lifter raise button.
  * @return true if the button is pressed
  */
-bool Controller_IsLifterRaiseButtonPressed(void);
+bool Controller_IsLifterTrayDumpButtonPressed(void);
 
 /**
  * Gets the state of the lifter lower button.
  * @return true if the button is pressed
  */
-bool Controller_IsLifterLowerButtonPressed(void);
+bool Controller_IsLifterTiltBackwardButtonPressed(void);
 
 /**
  * Gets the state of the sweeper in button.
  * @return true if the button is pressed
  */
-bool Controller_IsSweeperToggleButtonPressed(void);
+bool Controller_IsSweeperInButtonPressed(void);
 
 /**
  * Gets the state of the sweeper out button.
@@ -49,5 +49,7 @@ Controller_Position Controller_GetDriveMove(void);
  * @return the position of the joystick between -127 and 127
  */
 Controller_Position Controller_GetDriveRotate(void);
+
+Controller_Position Controller_GetLifterSpeed(void);
 
 #endif	/* CONTROLLER_H */

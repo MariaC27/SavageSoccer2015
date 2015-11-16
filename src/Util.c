@@ -1,15 +1,25 @@
 #include "Util.h"
 
-signed char min(signed char a, signed char b) {
+signed char Min(signed char a, signed char b) {
 	return (a < b) ? a : b;
 }
 
-signed char max(signed char a, signed char b) {
+signed char Max(signed char a, signed char b) {
 	return (a > b) ? a : b;
 }
 
-int abs(int n) {
+int Abs(int n) {
 	return n * ((n < 0) ? -1 : 1);
+}
+
+signed char Limit(int i) {
+	if (i > 127) {
+		return 127;
+	} else if (i < -127) {
+		return -127;
+	} else {
+		return i;
+	}
 }
 
 unsigned char ConvertUnsigned(signed char n) {

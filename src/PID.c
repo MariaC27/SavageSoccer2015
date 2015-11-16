@@ -2,21 +2,23 @@
 #include "Util.h"
 
 void PID_Init(PID* pid) {
-	// Give all the
+	// Give all the constants default values
 	pid->p = 0;
 	pid->i = 0;
 	pid->d = 0;
+	pid->div = 1;
 	pid->tolerance = 0;
-	pid->maxIntegral = 100;
+	pid->maxIntegral = 127;
 	pid->minOutput = -127;
 	pid->maxOutput = 127;
+	pid->interval = 20;
 
 	PID_Reset(pid);
 }
 
 int PID_Calc(PID* pid, int input, int setpoint) {
 	// All variables must be declared at the start of their scope... arrgh
-	unsigned long currTime = GetUsClock();
+	unsigned long currTime = GetMsClock();
 	unsigned long elapsedTime;
 
 	// If controller was reset (or not initialized), set lastTime to the current
@@ -30,37 +32,37 @@ int PID_Calc(PID* pid, int input, int setpoint) {
 
 	// Only update the output if more than one microsecond has passed to avoid
 	// divide by zero errors.
-	if (elapsedTime >= 1) {
+	if (elapsedTime >= pid->interval) {
 		int output;
 
-		float pTerm;
-		float iTerm;
-		float dTerm;
+		int pTerm;
+		int iTerm;
+		int dTerm;
 
 		// error = difference between setpoint and the actual value
 		int error = setpoint - input;
 
 		// proportional term = P gain * error
-		pTerm = pid->p * error;
+		pTerm = error * pid->p;
 
 		// Calculate the new integral
-		pid->integral += error * elapsedTime;
+		pid->integral += error;
 
 		// Prevent integral windup
-		if (abs(pid->integral) > pid->maxIntegral) {
+		if (Abs(pid->integral) > pid->maxIntegral) {
 			pid->integral = (
 					(pid->integral < 0) ?
 							(-pid->maxIntegral) : (pid->maxIntegral));
 		}
 
 		// integral term = I gain * integral
-		iTerm = pid->i * pid->integral;
+		iTerm = pid->integral * pid->i;
 
 		// derivative term = D gain * rate of change of error
-		dTerm = pid->d * ((float) (error - pid->lastError) / elapsedTime);
+		dTerm = (error - pid->lastError) * pid->d;
 
 		// Sum the terms to get the (unbounded) output.
-		output = (int) (pTerm + iTerm + dTerm);
+		output = (pTerm + iTerm + dTerm) / pid->div;
 
 		// Limit the output to the possible values for the system
 		if (output > pid->maxOutput) {
@@ -91,5 +93,5 @@ void PID_Reset(PID* pid) {
 }
 
 bool PID_OnTarget(PID* pid) {
-	return (abs(pid->lastError) < pid->tolerance) && (pid->valid);
+	return (Abs(pid->lastError) < pid->tolerance) && (pid->valid);
 }

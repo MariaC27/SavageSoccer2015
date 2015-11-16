@@ -17,6 +17,10 @@ typedef unsigned char Sensor_Port;
  * at the end of the match. Comment this out for demos, etc.
  */
 //#define COMPETITION
+#ifndef COMPETITION
+//#define SMART_DASHBOARD
+#endif // COMPETITION
+
 /**
  * Boolean data type. This is done for convenience and semantic clarity because 
  * C does not have a bool type.

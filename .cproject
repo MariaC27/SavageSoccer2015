@@ -32,10 +32,12 @@
 								<option id="gnu.c.compiler.exe.release.option.debugging.level.602226643" name="Debug Level" superClass="gnu.c.compiler.exe.release.option.debugging.level" value="gnu.c.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.1211792074" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/VexBuild/Toolchain/WPILib/Vex}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/VexBuild/Toolchain/mcc18/h}&quot;"/>
 								</option>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1227650233" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_VEX_BOARD"/>
 									<listOptionValue builtIn="false" value="rom"/>
+									<listOptionValue builtIn="false" value="__18CXX=1"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.749581081" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>

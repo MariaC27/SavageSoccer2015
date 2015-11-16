@@ -9,22 +9,24 @@
 #define	UTIL_H
 
 /**
- * Computes the minimum of two numbers.
+ * Computes the minimum of two bytes.
  * @param a one number
  * @param b another number
  * @return the minimum
  */
-signed char min(char a, char b);
+signed char Min(char a, char b);
 
 /**
- * Computes the maximum of two numbers.
+ * Computes the maximum of two bytes.
  * @param a one number
  * @param b another number
  * @return the maximum
  */
-signed char max(signed char a, signed char b);
+signed char Max(signed char a, signed char b);
 
-int abs(int n);
+int Abs(int n);
+
+signed char Limit(int i);
 
 unsigned char ConvertUnsigned(signed char n);
 

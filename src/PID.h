@@ -12,13 +12,20 @@
 
 typedef struct {
 	// Public
-	float p;
-	float i;
-	float d;
+
+	// PID tuning variables
+	int p;
+	int i;
+	int d;
+	int div;
+
+	// Other settings
 	int tolerance;
 	int maxIntegral;
 	int minOutput;
 	int maxOutput;
+	long interval;
+
 	// Private
 	int lastError;
 	unsigned long lastTime;

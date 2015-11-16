@@ -1,12 +1,16 @@
 #include "Common.h"
 #include "Controller.h"
 #include "Drive.h"
+#include "Sweeper.h"
 #include "Autonomous.h"
+#include "Motor.h"
+#include "Lifter.h"
+#include "SmartDashboard.h"
 
 // Length of autonomous period in seconds
-unsigned char autonomousTime = 10;
+const unsigned char autonomousTime = 15;
 // Length of teleoperated period in seconds
-unsigned char teleopTime = 120;
+const unsigned char teleopTime = 120;
 
 void IO_Initialization(void);
 void Initialize(void);
@@ -33,7 +37,7 @@ void IO_Initialization(void) {
 			INPUT, // 2
 			INPUT, // 3
 			INPUT, // 4
-			INPUT, // 5
+			OUTPUT, // 5
 			INPUT, // 6
 			INPUT, // 7
 			INPUT, // 8
@@ -53,7 +57,11 @@ void IO_Initialization(void) {
  * regardless of the field mode.
  */
 void Initialize(void) {
+	OpenSerialPortOne(BAUD_115200);
+
 	Drive_Init();
+	Sweeper_Init();
+	Lifter_Init();
 }
 
 /*
@@ -68,16 +76,74 @@ void Autonomous(void) {
 
 /*
  * The OperatorControl function will be called when the field
- * switches to operator mode. If the field ever switches back
+ * switches to operator mode. If the field ever switches b3ack
  * to autonomous, then OperatorControl will automatically exit
  * and the program will transfer control to the Autonomous
  * function.
  */
 void OperatorControl(void) {
+	static SmartDashboard_Value sdValue;
+	static unsigned long sdReceiveCount = 0;
+
 	Drive_TeleopInit();
+	Sweeper_TeleopInit();
+	Lifter_TeleopInit();
 
 	while (true) {
 		Drive_Teleop();
+		Sweeper_Update();
+		Lifter_Update();
+
+#ifdef SMART_DASHBOARD
+		// Read SmartDashboard variables
+		// This must be done from one location, because there is no way to get
+		// a specific variable's value
+		if (SmartDashboard_getValue(&sdValue)) {
+			if (sdValue.type == INT) {
+				int value = sdValue.value.integer;
+//				if (SmartDashboard_keyEqual(&sdValue, Sweeper_pKey)) {
+//					Sweeper_PID.p = value;
+//				} else if (SmartDashboard_keyEqual(&sdValue, Sweeper_iKey)) {
+//					Sweeper_PID.i = value;
+//				} else if (SmartDashboard_keyEqual(&sdValue, Sweeper_dKey)) {
+//					Sweeper_PID.d = value;
+//				} else if (SmartDashboard_keyEqual(&sdValue, Sweeper_divKey)) {
+//					Sweeper_PID.div = value;
+//				}
+				if (SmartDashboard_keyEqual(&sdValue, Lifter_velPDownKey)) {
+					Lifter_velPIDDownConstants.p = value;
+				} else if (SmartDashboard_keyEqual(&sdValue,
+						Lifter_velIDownKey)) {
+					Lifter_velPIDDownConstants.i = value;
+				} else if (SmartDashboard_keyEqual(&sdValue,
+						Lifter_velDDownKey)) {
+					Lifter_velPIDDownConstants.d = value;
+				} else if (SmartDashboard_keyEqual(&sdValue,
+						Lifter_velPUpKey)) {
+					Lifter_velPIDUpConstants.p = value;
+				} else if (SmartDashboard_keyEqual(&sdValue,
+						Lifter_velIUpKey)) {
+					Lifter_velPIDUpConstants.i = value;
+				} else if (SmartDashboard_keyEqual(&sdValue,
+						Lifter_velDUpKey)) {
+					Lifter_velPIDUpConstants.d = value;
+				} else if (value
+						&& SmartDashboard_keyEqual(&sdValue,
+								Lifter_velDivKey)) {
+					Lifter_velPID.div = value;
+				} else if (value
+						&& SmartDashboard_keyEqual(&sdValue,
+								Lifter_velInputDivKey)) {
+					Lifter_velInputDiv = value;
+				} else {
+					--sdReceiveCount;
+				}
+			} else {
+				--sdReceiveCount;
+			}
+			SmartDashboard_putInt("RX", ++sdReceiveCount);
+		}
+#endif // SMART_DASHBOARD
 
 #ifndef COMPETITION
 		if (!IsEnabled())
@@ -96,8 +162,6 @@ void main(void) {
 	IO_Initialization();
 	Initialize();
 	while (true) {
-		while (!IsEnabled())
-			;
 		OperatorControl();
 	}
 #endif /* COMPETITION */

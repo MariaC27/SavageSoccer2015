@@ -17,10 +17,8 @@ typedef struct {
 } Drive_Wheel;
 
 typedef struct {
-	const Drive_Wheel frontLeft;
-	const Drive_Wheel frontRight;
-	const Drive_Wheel rearLeft;
-	const Drive_Wheel rearRight;
+	const Drive_Wheel left;
+	const Drive_Wheel right;
 } Drive_Wheels;
 const extern Drive_Wheels Drive_wheels;
 
@@ -60,21 +58,12 @@ void Drive_Arcade(Motor_Speed moveSpeed, Motor_Speed rotateSpeed);
  */
 void Drive_Tank(Motor_Speed leftSpeed, Motor_Speed rightSpeed);
 
-void Drive_Orientation(Motor_Speed speed, Motor_Speed maxRotationSpeed,
-		int targetAngle);
-
 /**
  * Drives the robot in a straight line at the specified speed.
  * 
  * @param speed the speed to drive at (-127 to 127)
  */
 void Drive_Straight(Motor_Speed speed);
-
-void Drive_StraightTime(Motor_Speed speed, long rampTime, long time);
-
-void Drive_RotateTo(int orientation, Motor_Speed maxRotationSpeed);
-
-void Drive_Rotate(int degrees, Motor_Speed maxRotationSpeed);
 
 /**
  * Stops the robot.

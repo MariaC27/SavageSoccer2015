@@ -13,11 +13,13 @@ const Controller_Port Controller_port = PORT_1;
 const Controller_Channel Controller_sweeperToggleButton = CHANNEL_5_TOP;
 const Controller_Channel Controller_sweeperOutButton = CHANNEL_5_BOTTOM;
 
-const Controller_Channel Controller_lifterRaiseButton = CHANNEL_6_TOP;
-const Controller_Channel Controller_lifterLowerButton = CHANNEL_6_BOTTOM;
+const Controller_Channel Controller_lifterTrayDumpButton = CHANNEL_6_TOP;
+const Controller_Channel Controller_lifterTiltBackwardButton = CHANNEL_6_BOTTOM;
 
 const Controller_Channel Controller_driveMoveChannel = CHANNEL_3;
-const Controller_Channel Controller_driveRotateChannel = CHANNEL_1;
+const Controller_Channel Controller_driveRotateChannel = CHANNEL_4;
+
+const Controller_Channel Controller_lifterSpeedChannel = CHANNEL_2;
 
 Controller_Position Controller_GetStickAxis(Controller_Port port,
 		Controller_Channel channel) {
@@ -26,15 +28,15 @@ Controller_Position Controller_GetStickAxis(Controller_Port port,
 	return -ConvertSigned(GetOIAInput(port, channel));
 }
 
-bool Controller_IsLifterRaiseButtonPressed(void) {
-	return GetOIDInput(Controller_port, Controller_lifterRaiseButton);
+bool Controller_IsLifterTrayDumpButtonPressed(void) {
+	return GetOIDInput(Controller_port, Controller_lifterTrayDumpButton);
 }
 
-bool Controller_IsLifterLowerButtonPressed(void) {
-	return GetOIDInput(Controller_port, Controller_lifterLowerButton);
+bool Controller_IsLifterTiltBackwardButtonPressed(void) {
+	return GetOIDInput(Controller_port, Controller_lifterTiltBackwardButton);
 }
 
-bool Controller_IsSweeperToggleButtonPressed(void) {
+bool Controller_IsSweeperInButtonPressed(void) {
 	return GetOIDInput(Controller_port, Controller_sweeperToggleButton);
 }
 
@@ -49,4 +51,9 @@ Controller_Position Controller_GetDriveMove(void) {
 Controller_Position Controller_GetDriveRotate(void) {
 	return Controller_GetStickAxis(Controller_port,
 			Controller_driveRotateChannel);
+}
+
+Controller_Position Controller_GetLifterSpeed(void) {
+	return Controller_GetStickAxis(Controller_port,
+			Controller_lifterSpeedChannel);
 }
