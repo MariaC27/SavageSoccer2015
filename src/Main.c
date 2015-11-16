@@ -21,12 +21,11 @@ void main(void);
  * This function must be here for a competition project. It
  * is automatically referenced by WPILib at startup and run.
  * At that point the SetCompetitionMode function sets the
- * competition mode. Basically, a mode of 0 is the default
- * (without the IO_Initialization function) and runs a main
- * function only.
- * SetCompetitionMode(1) runs a competition project as shown.
+ * competition mode. The parameters control the length of
+ * autonomous and teleop.
  */
 void IO_Initialization(void) {
+	// COMPETITION is defined in Common.h
 #ifdef COMPETITION
 	// Ten second autonomous and 120 second teleop
 	SetCompetitionMode(autonomousTime, teleopTime);
@@ -37,7 +36,7 @@ void IO_Initialization(void) {
 			INPUT, // 2
 			INPUT, // 3
 			INPUT, // 4
-			OUTPUT, // 5
+			INPUT, // 5
 			INPUT, // 6
 			INPUT, // 7
 			INPUT, // 8
@@ -57,8 +56,10 @@ void IO_Initialization(void) {
  * regardless of the field mode.
  */
 void Initialize(void) {
+	// This seems to make reading from the serial port work
 	OpenSerialPortOne(BAUD_115200);
 
+	// Initialize subsystems
 	Drive_Init();
 	Sweeper_Init();
 	Lifter_Init();
@@ -101,41 +102,25 @@ void OperatorControl(void) {
 		if (SmartDashboard_getValue(&sdValue)) {
 			if (sdValue.type == INT) {
 				int value = sdValue.value.integer;
-//				if (SmartDashboard_keyEqual(&sdValue, Sweeper_pKey)) {
-//					Sweeper_PID.p = value;
-//				} else if (SmartDashboard_keyEqual(&sdValue, Sweeper_iKey)) {
-//					Sweeper_PID.i = value;
-//				} else if (SmartDashboard_keyEqual(&sdValue, Sweeper_dKey)) {
-//					Sweeper_PID.d = value;
-//				} else if (SmartDashboard_keyEqual(&sdValue, Sweeper_divKey)) {
-//					Sweeper_PID.div = value;
-//				}
-				if (SmartDashboard_keyEqual(&sdValue, Lifter_velPDownKey)) {
-					Lifter_velPIDDownConstants.p = value;
-				} else if (SmartDashboard_keyEqual(&sdValue,
-						Lifter_velIDownKey)) {
-					Lifter_velPIDDownConstants.i = value;
-				} else if (SmartDashboard_keyEqual(&sdValue,
-						Lifter_velDDownKey)) {
-					Lifter_velPIDDownConstants.d = value;
-				} else if (SmartDashboard_keyEqual(&sdValue,
-						Lifter_velPUpKey)) {
-					Lifter_velPIDUpConstants.p = value;
-				} else if (SmartDashboard_keyEqual(&sdValue,
-						Lifter_velIUpKey)) {
-					Lifter_velPIDUpConstants.i = value;
-				} else if (SmartDashboard_keyEqual(&sdValue,
-						Lifter_velDUpKey)) {
-					Lifter_velPIDUpConstants.d = value;
+#ifdef LIFTER_PID
+				if (SmartDashboard_keyEqual(&sdValue, Lifter_pDownKey)) {
+					Lifter_PIDDownConstants.p = value;
+				} else if (SmartDashboard_keyEqual(&sdValue, Lifter_iDownKey)) {
+					Lifter_PIDDownConstants.i = value;
+				} else if (SmartDashboard_keyEqual(&sdValue, Lifter_dDownKey)) {
+					Lifter_PIDDownConstants.d = value;
+				} else if (SmartDashboard_keyEqual(&sdValue, Lifter_pUpKey)) {
+					Lifter_PIDUpConstants.p = value;
+				} else if (SmartDashboard_keyEqual(&sdValue, Lifter_iUpKey)) {
+					Lifter_PIDUpConstants.i = value;
+				} else if (SmartDashboard_keyEqual(&sdValue, Lifter_dUpKey)) {
+					Lifter_PIDUpConstants.d = value;
 				} else if (value
-						&& SmartDashboard_keyEqual(&sdValue,
-								Lifter_velDivKey)) {
-					Lifter_velPID.div = value;
-				} else if (value
-						&& SmartDashboard_keyEqual(&sdValue,
-								Lifter_velInputDivKey)) {
-					Lifter_velInputDiv = value;
-				} else {
+						&& SmartDashboard_keyEqual(&sdValue, Lifter_divKey)) {
+					Lifter_PID.div = value;
+				} else
+#endif // LIFTER_PID
+				{
 					--sdReceiveCount;
 				}
 			} else {

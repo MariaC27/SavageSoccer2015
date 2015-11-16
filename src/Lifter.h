@@ -12,25 +12,27 @@
 #include "Motor.h"
 #include "PID.h"
 
+//#define LIFTER_PID
+
 typedef struct {
 	int p;
 	int i;
 	int d;
 } Lifter_PIDConstants;
 
-extern PID Lifter_velPID;
-extern Lifter_PIDConstants Lifter_velPIDDownConstants;
-extern Lifter_PIDConstants Lifter_velPIDUpConstants;
+extern PID Lifter_PID;
+extern Lifter_PIDConstants Lifter_PIDDownConstants;
+extern Lifter_PIDConstants Lifter_PIDUpConstants;
 extern int Lifter_velInputDiv;
 
 #ifdef SMART_DASHBOARD
-extern const rom char* Lifter_velPDownKey;
-extern const rom char* Lifter_velIDownKey;
-extern const rom char* Lifter_velDDownKey;
-extern const rom char* Lifter_velPUpKey;
-extern const rom char* Lifter_velIUpKey;
-extern const rom char* Lifter_velDUpKey;
-extern const rom char* Lifter_velDivKey;
+extern const rom char* Lifter_pDownKey;
+extern const rom char* Lifter_iDownKey;
+extern const rom char* Lifter_dDownKey;
+extern const rom char* Lifter_pUpKey;
+extern const rom char* Lifter_iUpKey;
+extern const rom char* Lifter_dUpKey;
+extern const rom char* Lifter_divKey;
 extern const rom char* Lifter_velInputDivKey;
 #endif // SMART_DASHBOARD
 
@@ -53,14 +55,31 @@ void Lifter_SetTrayDumperExtended(bool extended);
 
 void Lifter_SetLiftSpeed(Motor_Speed speed);
 
+/**
+ * Gets the position of the lifter as measured by the potentiometer. This value
+ * can theoretically range between 0 and 1024, but when the lifter is lowered
+ * the value is around 960. When the lifter is fully extended (on the floor,
+ * outside the robot), this method will return 0 because this is beyond the
+ * electrical range of the potentiometer.
+ *
+ * @return the position of the lifter.
+ */
 unsigned int Lifter_GetPosition(void);
 
 /**
  * Gets the speed of the lifter in position per 50 ms. This must be called at
  * least once every 50ms for it to return valid values.
+ *
+ * @return the speed measured by the potentiometer
  */
 int Lifter_GetSpeed(void);
 
+/**
+ * Sets the angle of the lifter tray. The angle is given as a value between 0
+ * and 255, with 127 being flat.
+ *
+ * @param angle the angle of the tray
+ */
 void Lifter_SetTrayAngle(unsigned char angle);
 
 #endif	/* LIFTER_H */

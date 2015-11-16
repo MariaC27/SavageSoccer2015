@@ -9,6 +9,37 @@
 #define	UTIL_H
 
 /**
+ * Bit mask specifying that the ramper should ramp up.
+ */
+extern unsigned char RAMPER_TYPE_UP;
+/**
+ * Bit mask specifying that the ramper should ramp down.
+ */
+extern unsigned char RAMPER_TYPE_DOWN;
+
+/**
+ * Holds data necessary for the ramping algorithm
+ */
+typedef struct {
+	// Public
+	unsigned long interval;
+	int maxDelta;
+	/**
+	 * RAMPER_TYPE_UP, RAMPER_TYPE_DOWN or a bitwise or of the two.
+	 */
+	unsigned char type;
+
+	// Private
+	unsigned long lastTime;
+	int lastOutput;
+} Ramper;
+
+/**
+ * Ramps the input value using the parameters specified in the Ramper struct.
+ */
+int Ramper_Ramp(Ramper* ramper, int input);
+
+/**
  * Computes the minimum of two bytes.
  * @param a one number
  * @param b another number
