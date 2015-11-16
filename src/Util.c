@@ -11,8 +11,8 @@ int Ramper_Ramp(Ramper* ramper, int input) {
 	// Check if enough time has passed to ramp
 	if (time - ramper->lastTime > ramper->interval) {
 		// Check if ramper is set up for up, down or both
-		bool up = ramper->type | RAMPER_TYPE_UP == RAMPER_TYPE_UP;
-		bool down = ramper->type | RAMPER_TYPE_DOWN == RAMPER_TYPE_DOWN;
+		bool up = ramper->type & RAMPER_TYPE_UP == RAMPER_TYPE_UP;
+		bool down = ramper->type & RAMPER_TYPE_DOWN == RAMPER_TYPE_DOWN;
 
 		// Change since last calculation
 		int delta = input - ramper->lastOutput;
