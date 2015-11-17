@@ -17,7 +17,7 @@ void Initialize(void);
 void OperatorControl(void);
 void main(void);
 
-/*
+/**
  * This function must be here for a competition project. It
  * is automatically referenced by WPILib at startup and run.
  * At that point the SetCompetitionMode function sets the
@@ -31,7 +31,7 @@ void IO_Initialization(void) {
 	SetCompetitionMode(autonomousTime, teleopTime);
 #endif /* COMPETITION */
 	// Set all ports to digital input mode
-	DefineControllerIO(1, // Number of analog inputs
+	DefineControllerIO(1, // Number of analog inputs (for lifter pot)
 			INPUT, // 1 - digital I/O port mode
 			INPUT, // 2
 			INPUT, // 3
@@ -51,12 +51,13 @@ void IO_Initialization(void) {
 			);
 }
 
-/*
+/**
  * Initialize is run immediately when the robot is powered on
  * regardless of the field mode.
  */
 void Initialize(void) {
-	// This seems to make reading from the serial port work
+	// This seems to make reading from the serial port work, even though it is
+	// supposed to be opened automatically.
 	OpenSerialPortOne(BAUD_115200);
 
 	// Initialize subsystems
@@ -65,26 +66,27 @@ void Initialize(void) {
 	Lifter_Init();
 }
 
-/*
- * Autonomous is run as soon as the field controls enable the
- * robot. At the end of the autonomous period, the Autonomous
- * function will end (note: even if it is in an infinite loop
- * as in the example, it will be stopped).
+/**
+ * If in competition mode, this function runs as soon as the controller is
+ * connected and stops after a preset amount of time. When not in competition
+ * mode, this function does not run.
  */
 void Autonomous(void) {
 	// Run autonomous mode
 	Autonomous_Run();
 }
 
-/*
- * The OperatorControl function will be called when the field
- * switches to operator mode. If the field ever switches back
- * to autonomous, then OperatorControl will automatically exit
- * and the program will transfer control to the Autonomous
- * function.
+/**
+ * The OperatorControl function will be called when the field switches to
+ * teleoperated mode. If the code was configured in competition mode, this runs
+ * after autonomous finishes, and will automatically stop when the match ends.
+ * Otherwise, this function is called after the robot is initialized and runs
+ * until the robot is turned off.
  */
 void OperatorControl(void) {
 	static SmartDashboard_Value sdValue;
+	// Count of number of known values received from the SmartDashboard. Used
+	// to echo back a receive confirmation.
 	static unsigned long sdReceiveCount = 0;
 
 	// Initialize subsystems at the beginning of teleop
@@ -140,15 +142,18 @@ void OperatorControl(void) {
 	}
 }
 
-/*
+/**
  * This main() function is run when the program is compiled to run in 
  * non-competition mode. It just runs teleop so we can do demos without worrying
  * about autonomous or the match ending.
  */
 void main(void) {
 #ifndef COMPETITION
+	// Initialize digital and analog inputs
 	IO_Initialization();
+	// Initialize the robot
 	Initialize();
+	// Run the teleop loop
 	OperatorControl();
 #endif /* COMPETITION */
 }

@@ -28,10 +28,10 @@ int PID_Calc(PID* pid, int input, int setpoint) {
 		pid->reset = false;
 	}
 
+	// Time since the last time the PID calculation ran
 	elapsedTime = currTime - pid->lastTime;
 
-	// Only update the output if more than one microsecond has passed to avoid
-	// divide by zero errors.
+	// Only update the output if the configured interval has passed
 	if (elapsedTime >= pid->interval) {
 		int output;
 
@@ -45,7 +45,8 @@ int PID_Calc(PID* pid, int input, int setpoint) {
 		// proportional term = P gain * error
 		pTerm = error * pid->p;
 
-		// Calculate the new integral
+		// Calculate the new integral (time is constant between calculations,
+		// so it is not used in this calculation)
 		pid->integral += error;
 
 		// Prevent integral windup
@@ -58,10 +59,12 @@ int PID_Calc(PID* pid, int input, int setpoint) {
 		// integral term = I gain * integral
 		iTerm = pid->integral * pid->i;
 
-		// derivative term = D gain * rate of change of error
+		// derivative term = D gain * rate of change of error (again, no time
+		// is needed)
 		dTerm = (error - pid->lastError) * pid->d;
 
-		// Sum the terms to get the (unbounded) output.
+		// Sum the terms and divide them by the configured divisor to get the
+		// (unbounded) output.
 		output = (pTerm + iTerm + dTerm) / pid->div;
 
 		// Limit the output to the possible values for the system
@@ -71,11 +74,13 @@ int PID_Calc(PID* pid, int input, int setpoint) {
 			output = pid->minOutput;
 		}
 
+		// Store the current error
 		pid->lastError = error;
 		pid->valid = true;
 		// Store the output for the next iteration and return it
 		return pid->lastOutput = output;
 	} else {
+		// Just return the last output if not enough time has passed yet.
 		return pid->lastOutput;
 	}
 }
