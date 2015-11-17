@@ -72,12 +72,13 @@ void Initialize(void) {
  * as in the example, it will be stopped).
  */
 void Autonomous(void) {
+	// Run autonomous mode
 	Autonomous_Run();
 }
 
 /*
  * The OperatorControl function will be called when the field
- * switches to operator mode. If the field ever switches b3ack
+ * switches to operator mode. If the field ever switches back
  * to autonomous, then OperatorControl will automatically exit
  * and the program will transfer control to the Autonomous
  * function.
@@ -86,10 +87,12 @@ void OperatorControl(void) {
 	static SmartDashboard_Value sdValue;
 	static unsigned long sdReceiveCount = 0;
 
+	// Initialize subsystems at the beginning of teleop
 	Drive_TeleopInit();
 	Sweeper_TeleopInit();
 	Lifter_TeleopInit();
 
+	// Run teleop update loop
 	while (true) {
 		Drive_Teleop();
 		Sweeper_Update();
@@ -146,8 +149,6 @@ void main(void) {
 #ifndef COMPETITION
 	IO_Initialization();
 	Initialize();
-	while (true) {
-		OperatorControl();
-	}
+	OperatorControl();
 #endif /* COMPETITION */
 }

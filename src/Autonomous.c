@@ -7,7 +7,7 @@ struct {
 	unsigned char numPins;
 } Autonomous_config = { 10, 3 };
 
-static void Autonomous_CubeSweep() {
+static void Autonomous_CubeSweep(void) {
 	// Turn on sweeper
 	Sweeper_SweepIn();
 	Drive_Straight(127);
@@ -24,8 +24,6 @@ static void Autonomous_CubeSweep() {
 void Autonomous_Run(void) {
 	unsigned char autoMode = 0;
 	unsigned char i;
-
-	Drive_AutonomousInit();
 
 	// Read autonomous configuration pins
 	for (i = 0; i < Autonomous_config.numPins; i++) {

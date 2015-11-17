@@ -15,13 +15,6 @@ void Drive_Init(void) {
 }
 
 /**
- * Put code here to initialize the drive subsystem at the beginning of
- * autonomous. 
- */
-void Drive_AutonomousInit(void) {
-}
-
-/**
  * Put code here to initialize the drive subsystem at the beginning of teleop. 
  */
 void Drive_TeleopInit(void) {

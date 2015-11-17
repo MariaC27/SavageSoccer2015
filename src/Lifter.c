@@ -5,7 +5,9 @@
 #include "Sweeper.h"
 #include "Util.h"
 
+#ifdef LIFTER_PID
 static void Lifter_SetPIDConstants(Lifter_PIDConstants* constants);
+#endif // LIFTER_PID
 
 const Motor_Port Lifter_leftArmMotorPort = 3;
 const Motor_Port Lifter_rightArmMotorPort = 4;
@@ -18,7 +20,9 @@ const unsigned char Lifter_potPort = 1;
 Ramper Lifter_speedRamper;
 Ramper Lifter_positionRamper;
 
+#ifdef LIFTER_PID
 PID Lifter_PID;
+
 Lifter_PIDConstants Lifter_PIDDownConstants;
 Lifter_PIDConstants Lifter_PIDUpConstants;
 
@@ -31,6 +35,7 @@ const rom char* Lifter_iUpKey = "L_iU";
 const rom char* Lifter_dUpKey = "L_dU";
 const rom char* Lifter_divKey = "L_div";
 #endif // SMART_DASHBOARD
+#endif // LIFTER_PID
 
 const struct {
 	unsigned char retract;
@@ -41,6 +46,7 @@ const struct {
  * Put code here to initialize the lifter subsystem.
  */
 void Lifter_Init(void) {
+#ifdef LIFTER_PID
 	PID_Init(&Lifter_PID);
 	Lifter_PIDDownConstants.p = 0;
 	Lifter_PIDDownConstants.i = 0;
@@ -53,6 +59,7 @@ void Lifter_Init(void) {
 	Lifter_PID.maxOutput = 80;
 
 	Lifter_SetPIDConstants(&Lifter_PIDUpConstants);
+#endif // LIFTER_PID
 
 	Lifter_speedRamper.interval = 5;
 	Lifter_speedRamper.maxDelta = 1;
@@ -89,7 +96,7 @@ void Lifter_Update(void) {
 
 	// Get the lifter speed from the controller, scale it down, and ramp it
 	Controller_Position lifterStickSpeed = Ramper_Ramp(&Lifter_speedRamper,
-			Controller_GetLifterSpeed() * 2 / 3);
+			((int) Controller_GetLifterSpeed() * 2) / 3);
 	Motor_Speed lifterSpeed;
 
 #ifdef LIFTER_PID
@@ -183,11 +190,14 @@ void Lifter_SetTrayDumperExtended(bool extended) {
 					Lifter_trayDumperPosition.retract);
 }
 
+#ifdef LIFTER_PID
 static void Lifter_SetPIDConstants(Lifter_PIDConstants* constants) {
 	Lifter_PID.p = constants->p;
 	Lifter_PID.i = constants->i;
 	Lifter_PID.d = constants->d;
 }
+#endif // LIFTER_PID
+
 
 void Lifter_SetLiftSpeed(Motor_Speed speed) {
 	Motor_set(Lifter_leftArmMotorPort, speed);

@@ -20,10 +20,10 @@ typedef struct {
 	int d;
 } Lifter_PIDConstants;
 
+#ifdef LIFTER_PID
 extern PID Lifter_PID;
 extern Lifter_PIDConstants Lifter_PIDDownConstants;
 extern Lifter_PIDConstants Lifter_PIDUpConstants;
-extern int Lifter_velInputDiv;
 
 #ifdef SMART_DASHBOARD
 extern const rom char* Lifter_pDownKey;
@@ -35,6 +35,7 @@ extern const rom char* Lifter_dUpKey;
 extern const rom char* Lifter_divKey;
 extern const rom char* Lifter_velInputDivKey;
 #endif // SMART_DASHBOARD
+#endif // LIFTER_PID
 
 /**
  * Runs once when the robot is powered on.
@@ -51,8 +52,18 @@ void Lifter_TeleopInit(void);
  */
 void Lifter_Update(void);
 
+/**
+ * Sets whether the dumper tray is extended.
+ *
+ * @param true if the tray is extended
+ */
 void Lifter_SetTrayDumperExtended(bool extended);
 
+/**
+ * Sets the speed of the lifter.
+ *
+ * @param the lifter speed
+ */
 void Lifter_SetLiftSpeed(Motor_Speed speed);
 
 /**

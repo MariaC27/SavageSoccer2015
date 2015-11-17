@@ -18,7 +18,7 @@ typedef unsigned char Sensor_Port;
  */
 //#define COMPETITION
 #ifndef COMPETITION
-#define SMART_DASHBOARD
+//#define SMART_DASHBOARD
 #endif // COMPETITION
 
 /**
