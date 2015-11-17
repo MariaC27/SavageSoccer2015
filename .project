@@ -3,6 +3,7 @@
 	<name>SavageSoccer2015</name>
 	<comment></comment>
 	<projects>
+		<project>VexBuild</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
