@@ -45,9 +45,9 @@ void IO_Initialization(void) {
 			INPUT, // 11
 			INPUT, // 12
 			INPUT, // 13
-			INPUT, // 14
-			INPUT, // 15
-			INPUT //  16
+			INPUT, // 14 - Autonomous config
+			INPUT, // 15 - Autonomous config
+			INPUT //  16 - Autonomous config
 			);
 }
 

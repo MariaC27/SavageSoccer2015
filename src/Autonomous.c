@@ -5,14 +5,32 @@
 struct {
 	unsigned char startPin;
 	unsigned char numPins;
-} Autonomous_config = { 10, 3 };
+} Autonomous_config = { 14, 3 };
 
 static void Autonomous_CubeSweep(void) {
+	unsigned char i = 0;
+
 	// Turn on sweeper
 	Sweeper_SweepIn();
-	Drive_Straight(127);
-	Wait(3000);
+
+	// Drive forward to the cube
+	Drive_Tank(50, 70);
+	Wait(1600);
 	Drive_Stop();
+
+	// Wait 0.75 seconds for the cubes to be picked up
+	Wait(750);
+
+	// Wiggle the robot back and forth
+	for (i = 0; i < 4; i++) {
+		Drive_Arcade(0, -70);
+		Wait(300);
+		Drive_Arcade(0, 70);
+		Wait(300);
+	}
+	Drive_Stop();
+
+	// Stop the sweeper
 	Sweeper_Stop();
 }
 
@@ -27,13 +45,17 @@ void Autonomous_Run(void) {
 
 	// Read autonomous configuration pins
 	for (i = 0; i < Autonomous_config.numPins; i++) {
-		if (GetDigitalInput(Autonomous_config.startPin + i)) {
+		// Digital inputs have pull-up resistors, and are pulled down when a
+		// jumper is connected.
+		if (!GetDigitalInput(Autonomous_config.startPin + i)) {
 			autoMode |= 1 << i;
 		}
 	}
 
+//	PrintToScreen("%i", (int) autoMode);
+
 	switch (autoMode) {
-	case 0b1:
+	case 1:
 		Autonomous_CubeSweep();
 		break;
 	}
