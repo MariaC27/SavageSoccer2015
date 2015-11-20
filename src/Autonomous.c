@@ -22,11 +22,11 @@ static void Autonomous_CubeSweep(void) {
 	Wait(750);
 
 	// Wiggle the robot back and forth
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 2; i++) {
 		Drive_Arcade(0, -70);
-		Wait(300);
+		Wait(150);
 		Drive_Arcade(0, 70);
-		Wait(300);
+		Wait(150);
 	}
 	Drive_Stop();
 
@@ -51,8 +51,6 @@ void Autonomous_Run(void) {
 			autoMode |= 1 << i;
 		}
 	}
-
-//	PrintToScreen("%i", (int) autoMode);
 
 	switch (autoMode) {
 	case 1:
