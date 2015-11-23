@@ -12,6 +12,7 @@ const unsigned char autonomousTime = 15;
 // Length of teleoperated period in seconds
 const unsigned char teleopTime = 120;
 
+// Forward declarations
 void IO_Initialization(void);
 void Initialize(void);
 void OperatorControl(void);
@@ -131,14 +132,11 @@ void OperatorControl(void) {
 			} else {
 				--sdReceiveCount;
 			}
+			// Write the receive counter to the SmartDashboard, to give
+			// confirmation that the message was received correctly.
 			SmartDashboard_putInt("RX", ++sdReceiveCount);
 		}
 #endif // SMART_DASHBOARD
-
-#ifndef COMPETITION
-		if (!IsEnabled())
-			break;
-#endif /* COMPETITION */
 	}
 }
 

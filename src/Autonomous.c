@@ -2,6 +2,9 @@
 #include "Drive.h"
 #include "Sweeper.h"
 
+/**
+ * Configuration for the autonomous selection pins.
+ */
 struct {
 	unsigned char startPin;
 	unsigned char numPins;
@@ -15,6 +18,7 @@ static void Autonomous_CubeSweep(void) {
 
 	// Drive forward to the cube
 	Drive_Tank(50, 70);
+
 	Wait(1600);
 	Drive_Stop();
 
