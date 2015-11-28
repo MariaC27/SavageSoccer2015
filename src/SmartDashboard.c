@@ -171,6 +171,7 @@ bool SmartDashboard_getValue(SmartDashboard_Value* value) {
 					break;
 				default:
 					if (began) {
+						// Gasp... http://xkcd.com/292/
 						goto append_byte;
 					}
 				}
